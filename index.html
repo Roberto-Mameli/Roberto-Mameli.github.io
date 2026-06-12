@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roberto Mameli</title>
+  <style>
+    /* ---- Reset & base ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1b2a38;
+      --navy2:  #243446;
+      --blue:   #2e86ab;
+      --blue-l: #4ca5c8;
+      --bg:     #f4f6f8;
+      --bg2:    #ffffff;
+      --text:   #2c3e50;
+      --muted:  #5f737f;
+      --border: #d0dae2;
+      --mono:   'Courier New', Courier, monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--blue-l); }
+
+    /* ---- Top nav ---- */
+    nav {
+      position: sticky;
+      top: 0;
+      background: var(--navy);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 2px solid var(--blue);
+    }
+    nav a {
+      color: #c9d8e4;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.4rem;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+    nav a:hover { background: var(--navy2); color: #fff; text-decoration: none; }
+
+    /* ---- Hero ---- */
+    #hero {
+      background: var(--navy);
+      color: #e0ecf5;
+      padding: 3.5rem 1.5rem 3rem;
+      text-align: center;
+    }
+    #hero h1 {
+      font-family: Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      margin-bottom: 0.4rem;
+    }
+    #hero .tagline {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue-l);
+      margin-bottom: 2rem;
+    }
+
+    /* Quotes carousel */
+    .quotes-wrap {
+      max-width: 640px;
+      margin: 0 auto 2rem;
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quote {
+      display: none;
+      font-style: italic;
+      font-size: 1.02rem;
+      color: #a8c4d4;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .quote.active { display: block; }
+    .quote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-style: normal;
+      font-size: 0.82rem;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #6a8fa3;
+      letter-spacing: 0.06em;
+    }
+    .quote-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 2rem;
+    }
+    .quote-dots button {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      border: none;
+      background: #3d6070;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s;
+    }
+    .quote-dots button.active { background: var(--blue-l); }
+
+    /* Social links in hero */
+    .social-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.6rem;
+    }
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--navy2);
+      border: 1px solid #3a5568;
+      border-radius: 4px;
+      padding: 0.35rem 0.9rem;
+      color: #b0cfe0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+    .social-links a:hover { border-color: var(--blue-l); color: #fff; text-decoration: none; }
+    .social-links a.donate {
+      border-color: #b57a00;
+      color: #f0c040;
+    }
+    .social-links a.donate:hover { border-color: #f0c040; color: #fff; }
+
+    /* ---- Intro blurb ---- */
+    #intro {
+      max-width: 760px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    /* ---- Sections ---- */
+    section {
+      max-width: 820px;
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+    }
+    section h2 {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      border-bottom: 2px solid var(--blue);
+      padding-bottom: 0.4rem;
+      margin-bottom: 1.4rem;
+    }
+    section h3 {
+      font-family: Georgia, serif;
+      font-size: 1.08rem;
+      font-weight: bold;
+      color: var(--navy);
+      margin: 1.6rem 0 0.4rem;
+    }
+    section h3 a { color: var(--navy); }
+    section h3 a:hover { color: var(--blue); }
+    section p { margin-bottom: 0.9rem; color: var(--text); font-size: 0.97rem; }
+    section ul { margin: 0.5rem 0 0.9rem 1.2rem; }
+    section ul li { margin-bottom: 0.35rem; font-size: 0.97rem; }
+
+    /* Subsection heading inside a section (e.g. inside Interests) */
+    .subsec-title {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin: 1.4rem 0 0.4rem;
+    }
+
+    /* Software cards */
+    .sw-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .sw-card h3 {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--navy);
+      margin: 0 0 0.4rem;
+    }
+    .sw-card p { margin-bottom: 0.5rem; font-size: 0.93rem; }
+    .sw-card .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    /* Articles: pub list */
+    .pub-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+    .pub-list li {
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.93rem;
+      line-height: 1.55;
+    }
+    .pub-list li:last-child { border-bottom: none; }
+
+    /* Links page: category */
+    .link-cat {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .link-cat h3 {
+      margin: 0 0 0.7rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .link-cat ul { list-style: none; margin: 0; padding: 0; }
+    .link-cat ul li { margin-bottom: 0.6rem; font-size: 0.93rem; }
+    .link-cat ul li strong { display: block; margin-bottom: 0.1rem; }
+    .link-cat ul li span { color: var(--muted); font-size: 0.88rem; }
+
+    /* Footer */
+    footer {
+      background: var(--navy);
+      color: #5f7f92;
+      text-align: center;
+      padding: 1.5rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      margin-top: 3rem;
+    }
+    footer a { color: #6a9db5; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #hero h1 { font-size: 1.7rem; }
+      nav a { padding: 0.65rem 0.8rem; font-size: 0.76rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <a href="#hero">Home</a>
+  <a href="#interests">Interests</a>
+  <a href="#software">Software</a>
+  <a href="#articles">Articles</a>
+  <a href="#links">Links</a>
+</nav>
+
+<!-- Hero -->
+<header id="hero">
+  <h1>Roberto Mameli</h1>
+  <p class="tagline">Software Architect &bull; Engineer &bull; Open Source Contributor</p>
+
+  <div class="quotes-wrap">
+    <div class="quote active">
+      "Simplicity is prerequisite for reliability."
+      <cite>Edsger Wybe Dijkstra</cite>
+    </div>
+    <div class="quote">
+      "Give me six hours to chop down a tree and I will spend the first four sharpening the axe."
+      <cite>Abraham Lincoln</cite>
+    </div>
+    <div class="quote">
+      "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."
+      <cite>Antoine de Saint-Exupery</cite>
+    </div>
+    <div class="quote">
+      "Adding manpower to a late software project makes it later."
+      <cite>Fred Brooks</cite>
+    </div>
+    <div class="quote">
+      "Be liberal in what you accept, and conservative in what you send."
+      <cite>Jon Postel</cite>
+    </div>
+    <div class="quote">
+      "Details make perfection, and perfection is not a detail."
+      <cite>Leonardo da Vinci</cite>
+    </div>
+  </div>
+  <div class="quote-dots" id="quoteDots"></div>
+
+  <div class="social-links">
+    <a href="mailto:roberto.mameli@outlook.it">&#9993; Email</a>
+    <a href="https://www.linkedin.com/in/roberto-mameli-7768427" target="_blank" rel="noopener">&#128101; LinkedIn</a>
+    <a href="https://github.com/Roberto-Mameli/" target="_blank" rel="noopener">&#128736; GitHub</a>
+    <a href="https://medium.com/@mameli2002" target="_blank" rel="noopener">&#128221; Medium</a>
+    <a href="https://www.paypal.com/donate/?business=GVWV5RTBQ58M6&no_recurring=1&currency_code=EUR"
+       target="_blank" rel="noopener" class="donate">&#9749; Donate</a>
+  </div>
+</header>
+
+<!-- Intro -->
+<div id="intro">
+  <p>
+    Hello world. This page tells something about me, my interests, and some software I have
+    written over time. I have made everything publicly available because I like the idea
+    that someone might find it useful.
+  </p>
+  <p>
+    All software is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html" target="_blank" rel="noopener">Apache License v2.0</a>
+    &mdash; free to use, including in commercial products, provided you comply with the Apache licensing terms.
+    If you find any of this work useful and want to contribute, donations are welcome via the button above.
+  </p>
+</div>
+
+<!-- Interests -->
+<section id="interests">
+  <h2>Personal Interests</h2>
+
+  <p>
+    My primary interest is computer science in the broad sense: I am fascinated both by
+    theoretical foundations and by the practical engineering of software systems. Over time
+    this has translated into focused work in several areas.
+  </p>
+
+  <p class="subsec-title">Programming Languages</p>
+  <p>
+    I have a long-standing interest in programming languages, their design, and their
+    trade-offs. My main practical language is C, which I appreciate for its closeness to
+    the machine, its predictability, and its efficiency. According to a well-known
+    <a href="https://greenlab.di.uminho.pt/wp-content/uploads/2017/09/paperSLE.pdf" target="_blank" rel="noopener">study on energy efficiency across languages</a>
+    (ACM SIGPLAN, 2017), C is the fastest and most energy-efficient choice across a broad
+    range of programming problems &mdash; a result that aligns well with the argument made by
+    Bjarne Stroustrup that software efficiency is, in a broad sense, also an ecological choice.
+    Beyond C, I follow developments in several other languages and enjoy understanding how
+    different paradigms approach the same problems.
+  </p>
+
+  <p class="subsec-title">Software Architectures</p>
+  <p>
+    I am actively working on and interested in cloud-native and distributed systems design,
+    including microservices architectures, service mesh patterns, asynchronous messaging
+    (Kafka, NATS, RabbitMQ), API design, and orchestration. I pay particular attention to
+    interoperability, federation, and the challenges of building systems that span multiple
+    administrative domains.
+  </p>
+
+  <p class="subsec-title">Cloud Orchestration and OASIS TOSCA</p>
+  <p>
+    I have been working on TOSCA (Topology and Orchestration Specification for Cloud
+    Applications), the OASIS standard language for describing cloud workloads and their
+    lifecycle management. I currently follow and contribute to the activity of the
+    <a href="https://github.com/oasis-open/tosca-community-contributions" target="_blank" rel="noopener">OASIS TOSCA community</a>,
+    with specific interest in cloud federation scenarios and Kubernetes profiles.
+  </p>
+
+  <p class="subsec-title">Algorithms and Data Structures</p>
+  <p>
+    I enjoy studying and implementing algorithms and data structures, especially those
+    oriented toward efficiency in time and memory. I have written a C library
+    (<a href="#software">libfmrt</a>) based on AVL trees for fast in-memory table management,
+    and I regularly follow resources such as the
+    <a href="https://xlinux.nist.gov/dads/" target="_blank" rel="noopener">NIST Dictionary of Algorithms and Data Structures</a>.
+  </p>
+
+  <p class="subsec-title">Open Source Software</p>
+  <p>
+    I believe in open source software and the community around it. All software I release
+    is published under the Apache License v2.0, and I actively use and contribute to open
+    source projects. My GitHub profile is at
+    <a href="https://github.com/Roberto-Mameli/" target="_blank" rel="noopener">github.com/Roberto-Mameli</a>.
+  </p>
+</section>
+
+<!-- Software -->
+<section id="software">
+  <h2>Software</h2>
+
+  <p>
+    Below is a list of software tools and libraries I have written over time, all licensed
+    under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html" target="_blank" rel="noopener">Apache License v2.0</a>.
+    Source code is available on GitHub; there is no binary download provided here.
+  </p>
+
+  <div class="sw-card">
+    <h3>csv2mdText</h3>
+    <p>
+      A Linux command-line tool that generates a Markdown document by extracting data from
+      a CSV table and applying a user-defined template. Useful for automating repetitive
+      document production (e.g. product catalogs, specification tables). The resulting
+      Markdown can be converted to other formats such as DOCX or PDF using tools like
+      <a href="https://pandoc.org/" target="_blank" rel="noopener">pandoc</a>.
+    </p>
+    <a class="gh-link" href="https://github.com/Roberto-Mameli/csv2mdText" target="_blank" rel="noopener">
+      &#128736; View on GitHub
+    </a>
+  </div>
+
+  <div class="sw-card">
+    <h3>importToscaDescWinery</h3>
+    <p>
+      A Linux command-line tool that parses a TOSCA YAML descriptor (type definitions or
+      topology template) and reorganizes its content into a folder structure suitable for
+      import into
+      <a href="https://winery.readthedocs.io/en/latest/" target="_blank" rel="noopener">Eclipse Winery</a>,
+      the open-source TOSCA graphical modeler. Realized for my company and released as
+      open source.
+      <br>
+      <em>Background:</em> <a href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca" target="_blank" rel="noopener">TOSCA</a>
+      is an OASIS standard for describing cloud workloads, their components, relationships,
+      and lifecycle management processes.
+    </p>
+    <a class="gh-link" href="https://github.com/Roberto-Mameli/importToscaDescWinery" target="_blank" rel="noopener">
+      &#128736; View on GitHub
+    </a>
+  </div>
+
+  <div class="sw-card">
+    <h3>libfmrt &mdash; Fast Memory Resident Tables Library</h3>
+    <p>
+      A C library (statically or dynamically linkable to C/C++ programs) for fast
+      management of large in-memory tables. Data is organized as
+      <a href="https://en.wikipedia.org/wiki/AVL_tree" target="_blank" rel="noopener">AVL trees</a>,
+      providing O(log<sub>2</sub>N) complexity on search, insert, and delete operations.
+      Not a database: no persistence, no SQL, no joins. Suitable for in-memory caches and
+      high-performance temporary data management.
+    </p>
+    <a class="gh-link" href="https://github.com/Roberto-Mameli/libfmrt" target="_blank" rel="noopener">
+      &#128736; View on GitHub
+    </a>
+  </div>
+
+  <div class="sw-card">
+    <h3>libmixf &mdash; Mixed Functions Library</h3>
+    <p>
+      A general-purpose C utility library collecting routines written over time for
+      different projects. Organized into the following functional categories:
+    </p>
+    <ul>
+      <li>File and File System Handling</li>
+      <li>Time and Date Handling</li>
+      <li>String Handling</li>
+      <li>Configuration Files Handling</li>
+      <li>Log Handling</li>
+      <li>License Handling</li>
+      <li>Lock Handling</li>
+      <li>Counters Handling</li>
+    </ul>
+    <p>
+      First released in October 2019 as libmisc. Renamed to libmixf in June 2021 when
+      licensed under Apache v2.0 (current version: v2.1.0).
+    </p>
+    <a class="gh-link" href="https://github.com/Roberto-Mameli/libmixf" target="_blank" rel="noopener">
+      &#128736; View on GitHub
+    </a>
+  </div>
+</section>
+
+<!-- Articles -->
+<section id="articles">
+  <h2>Articles</h2>
+
+  <h3>Writings on Medium</h3>
+  <ul class="pub-list">
+    <li>
+      <a href="https://medium.com/@mameli2002/how-is-working-today-in-modern-tech-organizations-14f7eb57713f" target="_blank" rel="noopener">
+        How is working today in modern tech organizations?
+      </a> &mdash; Apr 25, 2025
+    </li>
+    <li>
+      <a href="https://medium.com/@mameli2002/lets-go-forty-years-back-in-time-2e9038b68cb8" target="_blank" rel="noopener">
+        Let's go forty years back in time
+      </a> &mdash; Oct 26, 2024
+    </li>
+  </ul>
+
+  <h3>Publications</h3>
+  <ul class="pub-list">
+    <li>
+      A. Botta, P. Iovanna, R. Mameli, G. Piantanida, S. Salsano &mdash;
+      <a href="docs/3156.pdf" target="_blank" rel="noopener">
+        "Extending MPLS Traffic Engineering to deal with QoS"
+      </a>,
+      SoftCOM 2003, Split, October 2003
+    </li>
+    <li>
+      A. Bosco, R. Mameli, E. Manconi, F. Ubaldi &mdash;
+      <a href="https://ieeexplore.ieee.org/abstract/document/1178896/" target="_blank" rel="noopener">
+        "Edge Distributed Admission Control in MPLS"
+      </a>,
+      IEEE Communication Letters, Vol. 7, No. 2, February 2003
+    </li>
+    <li>
+      A. Bosco, R. Mameli, E. Manconi, F. Ubaldi &mdash;
+      <a href="https://link.springer.com/chapter/10.1007/3-540-36480-3_17" target="_blank" rel="noopener">
+        "Edge Distributed Admission Control for Performance Improvement in Traffic Engineered Networks"
+      </a>,
+      QoS-IP 2003, Milan, February 2003
+    </li>
+    <li>
+      R. Mameli, S. Salsano &mdash;
+      <a href="https://ieeexplore.ieee.org/abstract/document/937273" target="_blank" rel="noopener">
+        "Use of COPS for IntServ over DiffServ Operations: Architectural Issues, Protocol Design and Test-Bed Implementation"
+      </a>,
+      IEEE ICC 2001, Helsinki, June 2001
+    </li>
+    <li>
+      W. Almesberger, S. Giordano, R. Mameli, S. Salsano, F. Salvatore &mdash;
+      <a href="https://ieeexplore.ieee.org/abstract/document/892043" target="_blank" rel="noopener">
+        "A Prototype Implementation for the IntServ Operation over DifServ Network"
+      </a>,
+      IEEE GLOBECOM 2000, San Francisco, November&ndash;December 2000
+    </li>
+    <li>
+      R. Mameli &mdash;
+      <a href="docs/Articolo-Fitce-00.pdf" target="_blank" rel="noopener">
+        "The Strong Need for Policy in the QoS Environment"
+      </a>,
+      Journal of the IET, FITCE 39th edition, Limerick, August 2000
+    </li>
+    <li>
+      S. Giacometti, R. Mameli &mdash;
+      <a href="docs/Articolo-Fitce-99.pdf" target="_blank" rel="noopener">
+        "Tunnelling Effectiveness in the Access Environment"
+      </a>,
+      Journal of the IET, FITCE 38th edition, Utrecht, August 1999
+    </li>
+    <li>
+      S. Barbarossa, R. Mameli, A. Scaglione &mdash;
+      <a href="docs/AdaptiveDetectionPPS_Mameli.pdf" target="_blank" rel="noopener">
+        "Adaptive detection of Polynomial Phase Signals embedded in noise using high-order ambiguity function"
+      </a>,
+      Asilomar Conference on Signals, Systems and Computers, Pacific Grove (CA), November 1997
+    </li>
+  </ul>
+
+  <h3>Drafts Submitted to IETF</h3>
+  <ul class="pub-list">
+    <li>
+      R. Mameli, S. Salsano &mdash;
+      <a href="https://www.ietf.org/archive/id/draft-mameli-issll-is-ds-cops-00.txt" target="_blank" rel="noopener">
+        "Integrated services over DiffServ network using COPS-ODRA"
+      </a>,
+      Internet Draft, February 2000
+    </li>
+    <li>
+      R. Mameli &mdash;
+      <a href="https://www.ietf.org/archive/id/draft-mameli-issll-cops-api-00.txt" target="_blank" rel="noopener">
+        "The CCAPI (COPS Client Application Programming Interface)"
+      </a>,
+      Internet Draft, February 2000
+    </li>
+    <li>
+      P. Iovanna, R. Mameli, G. Piantanida, S. Salsano &mdash;
+      <a href="https://www.ietf.org/archive/id/draft-iovanna-rsvp-mpls-flowspec-00.txt" target="_blank" rel="noopener">
+        "Definition of the MPLS FlowSpec for RSVP-TE"
+      </a>,
+      Internet Draft, October 2001
+    </li>
+  </ul>
+
+  <h3>Master Degree Thesis</h3>
+  <ul class="pub-list">
+    <li>
+      R. Mameli &mdash;
+      <a href="docs/Tesi_Laurea_Roberto_Mameli_1997.pdf" target="_blank" rel="noopener">
+        "Rivelazione e stima parametrica di segnali PPS: applicazioni alla demodulazione di segnali CPM ed al telerilevamento"
+      </a>,
+      December 1997 (Italian)
+    </li>
+  </ul>
+</section>
+
+<!-- Links -->
+<section id="links">
+  <h2>Interesting Links</h2>
+
+  <div class="link-cat">
+    <h3>Operating Systems, Programming and Languages</h3>
+    <ul>
+      <li>
+        <strong><a href="https://github.com/EbookFoundation/free-programming-books/tree/main" target="_blank" rel="noopener">Free Programming Books</a></strong>
+        <span>A comprehensive list of free learning resources in many languages.</span>
+      </li>
+      <li>
+        <strong><a href="https://goalkicker.com/" target="_blank" rel="noopener">GoalKicker.com</a></strong>
+        <span>Free PDF programming notes for professionals, covering a wide range of languages and topics.</span>
+      </li>
+      <li>
+        <strong><a href="https://the-algorithms.com/" target="_blank" rel="noopener">The Algorithms</a></strong>
+        <span>Open source library with implementations of many algorithms across different categories and languages.</span>
+      </li>
+      <li>
+        <strong><a href="https://xlinux.nist.gov/dads/" target="_blank" rel="noopener">NIST Dictionary of Algorithms and Data Structures</a></strong>
+        <span>Long-running reference dictionary of algorithms, data structures, and related definitions.</span>
+      </li>
+      <li>
+        <strong><a href="https://en.cppreference.com/w/" target="_blank" rel="noopener">Cppreference.com</a></strong>
+        <span>Complete reference for C and C++ languages, plus curated lists of open source C and C++ libraries.</span>
+      </li>
+      <li>
+        <strong><a href="http://www.yolinux.com/" target="_blank" rel="noopener">YoLinux.com</a></strong>
+        <span>Extensive collection of Linux tutorials, guides, and documentation.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="link-cat">
+    <h3>Coding Practice</h3>
+    <ul>
+      <li>
+        <strong><a href="https://exercism.io/" target="_blank" rel="noopener">Exercism</a></strong>
+        <span>Open source platform with thousands of exercises in 50+ languages and community mentoring.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.hackerrank.com/dashboard" target="_blank" rel="noopener">HackerRank</a></strong>
+        <span>Coding challenges across many domains; widely used by companies for technical assessments.</span>
+      </li>
+      <li>
+        <strong><a href="https://leetcode.com/" target="_blank" rel="noopener">LeetCode</a></strong>
+        <span>Algorithm training platform with articles, coding problems, and interview questions.</span>
+      </li>
+      <li>
+        <strong><a href="https://practice.geeksforgeeks.org/" target="_blank" rel="noopener">GeeksForGeeks Practice</a></strong>
+        <span>Large collection of algorithm exercises with multiple solution approaches.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.dailycodingproblem.com/" target="_blank" rel="noopener">Daily Coding Problem</a></strong>
+        <span>Subscribe to receive a coding problem by email every day.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.topcoder.com/challenges/" target="_blank" rel="noopener">TopCoder</a></strong>
+        <span>Online arena for competitive programming challenges.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="link-cat">
+    <h3>Articles, Tutorials and Books</h3>
+    <ul>
+      <li>
+        <strong><a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a></strong>
+        <span>Search engine indexing peer-reviewed journals, conference papers, theses, and technical reports.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.academia.edu/" target="_blank" rel="noopener">Academia.edu</a></strong>
+        <span>Platform for sharing and discovering academic research papers.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.researchgate.net/" target="_blank" rel="noopener">ResearchGate</a></strong>
+        <span>Social network for scientists and researchers; provides free access to many papers.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.slideshare.net/" target="_blank" rel="noopener">SlideShare</a></strong>
+        <span>Online sharing of presentations, slides, and documents. Integrated with LinkedIn.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.stroustrup.com/Software-for-infrastructure.pdf" target="_blank" rel="noopener">Software Development for Infrastructure</a></strong>
+        <span>Bjarne Stroustrup (IEEE Computer, January 2012): a case for correctness, reliability, and efficiency in infrastructure software.</span>
+      </li>
+      <li>
+        <strong><a href="https://greenlab.di.uminho.pt/wp-content/uploads/2017/09/paperSLE.pdf" target="_blank" rel="noopener">Energy Efficiency across Programming Languages</a></strong>
+        <span>ACM SIGPLAN SLE 2017: runtime, memory, and energy consumption of 27 languages across 10 programming problems.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.computer.org/csdl/magazine/so/2011/06/mso2011060104/13rRUwI5Uj1" target="_blank" rel="noopener">All Late Projects Are the Same</a></strong>
+        <span>Tom DeMarco (IEEE Software, December 2011): a concise explanation of why software projects run late.</span>
+      </li>
+      <li>
+        <strong><a href="https://mycourses.aalto.fi/pluginfile.php/884748/mod_resource/content/7/brooks1974.pdf" target="_blank" rel="noopener">The Mythical Man-Month</a></strong>
+        <span>Fred Brooks (Addison-Wesley, 1975): why the man-month is a dangerous unit of measure in software development.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="link-cat">
+    <h3>Learning Resources</h3>
+    <ul>
+      <li>
+        <strong><a href="https://www.codecademy.com/" target="_blank" rel="noopener">Codecademy</a></strong>
+        <span>Online courses on programming languages, web development, data science, and machine learning.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.coursera.org/" target="_blank" rel="noopener">Coursera</a></strong>
+        <span>University-backed online courses, certifications, and degrees; some fully free.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.udemy.com/" target="_blank" rel="noopener">Udemy</a></strong>
+        <span>Large marketplace of instructor-led courses on a huge variety of topics, often at low cost.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.tutorialspoint.com/" target="_blank" rel="noopener">Tutorialspoint</a></strong>
+        <span>Tutorials, courses, and e-books on a wide range of technical subjects.</span>
+      </li>
+      <li>
+        <strong><a href="https://tutorialsdojo.com/" target="_blank" rel="noopener">Tutorials Dojo</a></strong>
+        <span>Courses and study materials focused on cloud certifications (AWS, Azure, GCP).</span>
+      </li>
+      <li>
+        <strong><a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener">GeeksForGeeks</a></strong>
+        <span>Free tutorials, articles, live courses, coding competitions, and webinars.</span>
+      </li>
+      <li>
+        <strong><a href="https://aws.amazon.com/architecture/this-is-my-architecture" target="_blank" rel="noopener">This is My Architecture (AWS)</a></strong>
+        <span>Videos showcasing innovative architectural solutions built on AWS.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="link-cat">
+    <h3>Other Interesting Sites</h3>
+    <ul>
+      <li>
+        <strong><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></strong>
+        <span>Where the world builds software. Source code hosting and collaboration platform.</span>
+      </li>
+      <li>
+        <strong><a href="https://www.codeproject.com/" target="_blank" rel="noopener">CodeProject</a></strong>
+        <span>Community of software developers sharing code, tutorials, and knowledge freely.</span>
+      </li>
+      <li>
+        <strong><a href="https://medium.com/" target="_blank" rel="noopener">Medium</a></strong>
+        <span>Open publishing platform with insightful writing across technology and many other fields.</span>
+      </li>
+      <li>
+        <strong><a href="https://levelup.gitconnected.com/" target="_blank" rel="noopener">Level Up Coding</a></strong>
+        <span>Developer-focused publication on software development, tech, and engineering.</span>
+      </li>
+      <li>
+        <strong><a href="https://successfulsoftware.net/" target="_blank" rel="noopener">Successful Software</a></strong>
+        <span>Andy Brice's personal site with thoughts, articles, and resources for independent software developers.</span>
+      </li>
+    </ul>
+  </div>
+
+</section>
+
+<footer>
+  <p>Roberto Mameli &mdash; 2022&ndash;2025 &mdash; All rights reserved</p>
+  <p style="margin-top:0.4rem;">
+    <a href="mailto:roberto.mameli@outlook.it">roberto.mameli@outlook.it</a>
+    &nbsp;&bull;&nbsp;
+    <a href="https://github.com/Roberto-Mameli/" target="_blank" rel="noopener">GitHub</a>
+    &nbsp;&bull;&nbsp;
+    <a href="https://www.linkedin.com/in/roberto-mameli-7768427" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;&bull;&nbsp;
+    <a href="https://medium.com/@mameli2002" target="_blank" rel="noopener">Medium</a>
+  </p>
+</footer>
+
+<script>
+  // Quotes rotation
+  (function() {
+    var quotes = document.querySelectorAll('.quote');
+    var dotsContainer = document.getElementById('quoteDots');
+    var current = 0;
+    var dots = [];
+
+    quotes.forEach(function(_, i) {
+      var btn = document.createElement('button');
+      btn.setAttribute('aria-label', 'Quote ' + (i + 1));
+      if (i === 0) btn.classList.add('active');
+      btn.addEventListener('click', function() { go(i); });
+      dotsContainer.appendChild(btn);
+      dots.push(btn);
+    });
+
+    function go(idx) {
+      quotes[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = idx;
+      quotes[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+
+    setInterval(function() {
+      go((current + 1) % quotes.length);
+    }, 4500);
+  })();
+</script>
+
+</body>
+</html>
